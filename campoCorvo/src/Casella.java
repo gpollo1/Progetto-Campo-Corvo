@@ -22,6 +22,7 @@ public class Casella extends JButton {
         setBorderPainted(false);
 
         addMouseListener(new MouseAdapter() {
+            //Cambia immagine quando il mouse passa sopra il bottone
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (!cliccata && !isBandierina) {
@@ -31,6 +32,7 @@ public class Casella extends JButton {
 
             @Override
             public void mousePressed(MouseEvent e){
+                //isRightMouseButton ci permette di capire se è stato premuto il tasto destro in modo da poter mettere le bandierine
                 if(SwingUtilities.isRightMouseButton(e) && !cliccata && !CampoMinato.end){
                     if(isBandierina){
                         isBandierina = false;
@@ -44,6 +46,7 @@ public class Casella extends JButton {
                 }
             }
 
+            //reimposta l'icona normale quando il mouse esce dal bottone
             @Override
             public void mouseExited(MouseEvent e) {
                 if (!cliccata && !isBandierina) {

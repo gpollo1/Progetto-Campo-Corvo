@@ -4,30 +4,37 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+//CampoMinato implementa ActionListener in modo da avere un controllo su tutti gli eventi
 public class CampoMinato implements ActionListener {
-    public static int righe = 5;
-    public static int colonne = 5;
-    public static int nBombe = 2;
-    static Casella[][] caselle = new Casella[righe][colonne];
+    public int righe;
+    public int colonne;
+    public int nBombe;
+    private Casella[][] caselle;
     static JTextField jT;
     static JTextField countBand;
-    public static int bandierine = 10;
+    public static int bandierine;
     public static boolean end = false;
 
-    JFrame frame;
+    public JFrame frame;
 
     ImageIcon iconaChiara, iconaScura, iconaHover, iconaClick, iconaClickChiara, iconaBomba;
 
-    public static void main(String[] args) {
-        new CampoMinato();
+    public CampoMinato(int nColonne, int nRighe, int nBombe){
+        colonne = nColonne;
+        righe = nRighe;
+        this.nBombe= nBombe;
+        bandierine = nBombe;
+        caselle  = new Casella[righe][colonne];
     }
 
-    public CampoMinato() {
-        int larg = 1200;
-        int alt = 1200;
+    public void runCampoMinato() {
+
+        int larg = 700;
+        int alt = 700;
         JFrame f = new JFrame("Campo Minato");
         f.setBounds(100, 100, larg, alt);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setIconImage(new ImageIcon(Main.class.getResource("/immagini/Icona_campoMinato.png")).getImage());
         f.setContentPane(new Sfondo("medio.png"));
         f.setLayout(null);
         this.frame = f;
@@ -79,6 +86,7 @@ public class CampoMinato implements ActionListener {
     }
 
     private ImageIcon scalaIcona(String fileName, int larghezza, int altezza) {
+        //imposta la grandezza giusta alle immagini
         ImageIcon icona = new ImageIcon(getClass().getResource("/immagini/" + fileName));
         Image img = icona.getImage().getScaledInstance(larghezza, altezza, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
@@ -97,6 +105,7 @@ public class CampoMinato implements ActionListener {
         }
     }
 
+    //inserisci le bome in posizioni casuali
     public void inserisciBombe() {
         int riga, colonna;
         for (int i = 0; i < nBombe; i++) {
@@ -109,6 +118,7 @@ public class CampoMinato implements ActionListener {
     }
 
 
+    //Scopre le posizioni senza bombe vicine nel casoin cui viene premuta una casella senza nessun numero
     private void scopriZonaVuota(int riga, int colonna) {
         //se fuori dai limiti esce
         if (riga < 0 || riga >= righe || colonna < 0 || colonna >= colonne) return;
@@ -142,6 +152,7 @@ public class CampoMinato implements ActionListener {
         }
     }
 
+    //verifica se si ha vinto
     public boolean vittoria() {
         for (int i = 0; i < righe; i++) {
             for (int j = 0; j < colonne; j++) {
@@ -197,6 +208,7 @@ public class CampoMinato implements ActionListener {
         new Timer(3000, e -> System.exit(0)).start();
     }
 
+    //Conta quante bombe ci sono vicine
     public void leggiVicine() {
         for (int i = 0; i < righe; i++) {
             for (int j = 0; j < colonne; j++) {
@@ -219,6 +231,7 @@ public class CampoMinato implements ActionListener {
         return contatore;
     }
 
+    //legge tutti gli eventi
     @Override
     public void actionPerformed(ActionEvent e) {
         Object sorgente = e.getSource();
